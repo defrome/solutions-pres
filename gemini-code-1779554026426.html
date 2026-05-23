@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Бизнес-решения под ключ | Не теряйте заявки</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Базовые переменные строго по ТЗ + Премиум тюнинг */
+        :root {
+            --bg-base: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.7);
+            --bg-nested: rgba(30, 30, 30, 0.6);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            
+            --text-main: #f5f5f7;
+            --text-sec: #8e8e93;
+            --text-on-accent: #000000;
+            
+            --accent: #c8f135;
+            --accent-bg: rgba(200, 241, 53, 0.1);
+            --accent-border: rgba(200, 241, 53, 0.3);
+            --accent-hover: #d4f755;
+            
+            --status-new: #8e8e93;
+            --status-confirmed: #c8f135;
+            --status-done: #007aff;
+            --status-canceled: #ff3b30;
+            
+            --header-height: 80px;
+            --fx-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Обнуление */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            background-color: var(--bg-base);
+        }
+
+        body {
+            color: var(--text-main);
+            font-family: 'Golos Text', -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-base);
+        }
+
+        h1, h2, h3, .unbounded {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        /* Навигация фиксированная с размытием */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: rgba(10, 10, 10, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .logo {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+
+        .nav-link {
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 100px;
+            transition: var(--fx-transition);
+        }
+        .nav-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 15px rgba(200, 241, 53, 0.15);
+        }
+
+        /* Полноэкранный скролл на уровне секций */
+        section {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: var(--header-height);
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            z-index: 2;
+        }
+
+        /* Типографика */
+        h1 {
+            font-size: clamp(2.2rem, 6vw, 4.2rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.88rem;
+        }
+
+        p {
+            color: var(--text-sec);
+            font-weight: 400;
+        }
+
+        .text-accent { color: var(--accent); }
+
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent);
+            color: var(--text-on-accent);
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 18px 36px;
+            border-radius: 12px;
+            border: none;
+            transition: var(--fx-transition);
+            box-shadow: 0 4px 20px rgba(200, 241, 53, 0.15);
+        }
+        .btn:hover { 
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(200, 241, 53, 0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Премиум Карточки с глассморфизмом */
+        .card {
+            background-color: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            transition: var(--fx-transition);
+        }
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .nested-box {
+            background-color: var(--bg-nested);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* Табы / Бейджи */
+        .badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-sec);
+            font-family: 'Unbounded', sans-serif;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-weight: 700;
+            transition: var(--fx-transition);
+            cursor: pointer;
+        }
+        
+        .badge.active {
+            background-color: var(--accent-bg);
+            border-color: var(--accent-border);
+            color: var(--accent);
+        }
+        
+        button.badge {
+            outline: none;
+        }
+        button.badge:hover:not(.active) {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--text-main);
+        }
+
+        /* Сетки */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        /* Метрики */
+        .metric {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: -0.05em;
+        }
+
+        /* Интерактивная панель */
+        .interactive-section .tabs-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .panels-stack {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .panel-pane {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+            opacity: 0;
+            transform: translateY(10px);
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+        }
+
+        .panel-pane.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        /* Детализированный Mock-UI */
+        .mock-ui {
+            margin-top: 24px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            position: relative;
+        }
+        /* Имитация окна ОС */
+        .mock-ui::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 0;
+            display: flex;
+            gap: 6px;
+        }
+
+        /* Свечение заднего фона (Абсолюты) */
+        .glow-ambient {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200,241,53,0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            html {
+                scroll-snap-type: none; /* Отключаем жесткий скролл на планшетах/мобильных для UX */
+            }
+            section {
+                min-height: auto;
+                height: auto;
+                padding-top: 100px;
+                padding-bottom: 40px;
+            }
+            .grid-2 { grid-template-columns: 1fr; gap: 32px; }
+            .metric { font-size: 3rem; }
+            
+            .grid-3 {
+                display: flex;
+                overflow-x: auto;
+                gap: 16px;
+                padding-bottom: 20px;
+                margin-top: 32px;
+                scrollbar-width: thin;
+                scrollbar-color: var(--border-color) transparent;
+                -webkit-overflow-scrolling: touch;
+            }
+            .grid-3 .card {
+                min-width: 280px;
+                flex-shrink: 0;
+                padding: 32px;
+            }
+            /* Стилизация мобильного скроллбара */
+            .grid-3::-webkit-scrollbar {
+                height: 4px;
+            }
+            .grid-3::-webkit-scrollbar-thumb {
+                background: var(--border-color);
+                border-radius: 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-inner { padding: 0 16px; }
+            .container { padding: 24px 16px; }
+            .card { padding: 24px; }
+            .nav-link { span { display: none; } }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo">SOLO.DEV</div>
+            <a href="https://t.me/your_telegram" target="_blank" class="nav-link unbounded">Telegram →</a>
+        </div>
+    </header>
+
+    <main>
+        
+        <section id="hero">
+            <div class="glow-ambient" style="top: -10%; left: -10px;"></div>
+            <div class="container">
+                <span class="badge active" style="margin-bottom: 28px; cursor: default;">Автоматизация для малого бизнеса</span>
+                <h1>Хватит терять клиентов.<br>Начните их обрабатывать.</h1>
+                <p style="font-size: 1.15rem; max-width: 620px; margin-bottom: 36px; color: var(--text-sec);">
+                    Помогаем салонам, сервисам и клиникам автоматизировать хаос. Настраиваем систему онлайн-записи и умных ботов, которые удерживают клиентов, пока вы заняты операционкой.
+                </p>
+                <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px;">
+                    <a href="https://t.me/your_telegram" target="_blank" class="btn">Запросить демо-версию</a>
+                    <div style="color: var(--text-sec); font-size: 14px; padding-left: 4px;">
+                        Покажем работающий прототип под вашу нишу <span class="text-accent">до оплаты</span>.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pain-points">
+            <div class="container">
+                <h2>Знакомая ситуация?</h2>
+                <div class="grid-3">
+                    <div class="card" style="border-top: 2px solid rgba(255, 59, 48, 0.3);">
+                        <h3 style="color: var(--status-canceled);">Никто не отвечает</h3>
+                        <p>Клиенты пишут в нерабочее время или когда администратор на звонке. Каждая минута ожидания — шаг клиента к вашим конкурентам.</p>
+                    </div>
+                    <div class="card" style="border-top: 2px solid rgba(255, 59, 48, 0.3);">
+                        <h3 style="color: var(--status-canceled);">Хаос в каналах</h3>
+                        <p>Заявки разбросаны между WhatsApp, Telegram, соцсетями и личными номерами. База клиентов не ведется, аналитики ноль.</p>
+                    </div>
+                    <div class="card" style="border-top: 2px solid rgba(255, 59, 48, 0.3);">
+                        <h3 style="color: var(--status-canceled);">Сложно контролировать</h3>
+                        <p>Вы не видите реальную картину бизнеса: сколько обращений пришло за неделю, сколько слито и какова цена ошибки администратора.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="interactive-section">
+            <div class="glow-ambient" style="bottom: -20%; right: -10%;"></div>
+            <div class="container">
+                <h2>Что мы внедряем</h2>
+                <p style="margin-bottom: 40px; max-width: 600px;">Простые инструменты без лишней терминологии. Вы выбираете ключевую задачу — мы разворачиваем готовое IT-решение.</p>
+                
+                <div class="grid-2">
+                    <div>
+                        <div class="tabs-wrapper">
+                            <button class="badge active" onclick="switchTab('pane-1', this)">01 / Сайты под задачу</button>
+                            <button class="badge" onclick="switchTab('pane-2', this)">02 / Системы записи</button>
+                            <button class="badge" onclick="switchTab('pane-3', this)">03 / Умные напоминания</button>
+                        </div>
+                        <p style="font-size: 14px; color: var(--text-sec);">Нажмите на шаг, чтобы увидеть интерфейс решения изнутри.</p>
+                    </div>
+                    
+                    <div class="card" style="padding: 32px;">
+                        <div class="panels-stack">
+                            
+                            <div class="panel-pane active" id="pane-1">
+                                <h3 class="text-accent">Конверсионные лендинги</h3>
+                                <p style="margin-bottom: 20px;">Создаем лаконичные посадочные страницы, оптимизированные под мобильный трафик. Главная цель — заставить пользователя сделать целевое действие.</p>
+                                <div class="mock-ui">
+                                    <div style="width: 100%; height: 90px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border-radius: 6px;">
+                                        <div style="font-family: 'Unbounded'; font-size: 11px; color: var(--text-sec);">Интерактивный блок услуг</div>
+                                    </div>
+                                    <button class="btn" style="width: 100%; padding: 14px; font-size: 12px; border-radius: 8px; pointer-events: none;">ВЫБРАТЬ ВРЕМЯ ВИЗИТА</button>
+                                </div>
+                            </div>
+
+                            <div class="panel-pane" id="pane-2">
+                                <h3 class="text-accent">Единая CRM и онлайн-запись</h3>
+                                <p style="margin-bottom: 20px;">Интегрируем календарь, где клиенты видят актуальные окна 24/7. Администратор получает уведомление и готовую карточку без рутины в чатах.</p>
+                                <div class="mock-ui" style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border-left: 3px solid var(--accent);">
+                                        <div style="font-size: 13px;">Детейлинг / Мастер: Иван</div>
+                                        <div class="badge active" style="font-size: 8px; padding: 4px 8px;">НОВАЯ ЗАЯВКА</div>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border-left: 3px solid var(--status-done);">
+                                        <div style="font-size: 13px;">Стрижка / Мастер: Алекс</div>
+                                        <div class="badge" style="font-size: 8px; padding: 4px 8px; color: var(--status-done); border-color: rgba(0,122,255,0.3);">ПОДТВЕРЖДЕНО</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-pane" id="pane-3">
+                                <h3 class="text-accent">Автоматизация мессенджеров</h3>
+                                <p style="margin-bottom: 20px;">Настраиваем триггерных ботов (WHatsApp/Telegram). Они автоматически подтверждают запись, напоминают за 2 часа и собирают отзывы. Минимум отмен.</p>
+                                <div class="mock-ui">
+                                    <div style="background: #262628; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px 12px 12px 0px; width: 85%; margin-bottom: 12px; font-size: 13px; line-height: 1.4;">
+                                        ⚡️ <strong>SoloBot:</strong> Вы записаны на завтра в 15:00. Подтвердите, пожалуйста, свой визит кнопкой ниже.
+                                    </div>
+                                    <div style="display: flex; gap: 8px; width: 85%;">
+                                        <div style="flex: 1; text-align: center; background: rgba(200,241,53,0.1); border: 1px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 8px; font-size: 9px; font-family: 'Unbounded'; font-weight:700;">ПОДТВЕРДИТЬ</div>
+                                        <div style="flex: 1; text-align: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-sec); padding: 10px; border-radius: 8px; font-size: 9px; font-family: 'Unbounded';">ОТМЕНИТЬ</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advantages">
+            <div class="container">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="metric">1 день</div>
+                        <h3>На сборку демо-версии</h3>
+                        <p>Мы против «котов в мешке». Сначала разрабатываем архитектуру под ваши задачи и показываем кликабельный прототип. Вы оцениваете удобство до проведения оплаты.</p>
+                    </div>
+                    <div class="card">
+                        <div class="metric">3–5 дней</div>
+                        <h3>До полного запуска</h3>
+                        <p>После утверждения концепта бесшовно подключаем CRM, настраиваем уведомления и интегрируем каналы связи. Передаем систему под ключ с инструкциями.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta">
+            <div class="glow-ambient" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; height: 90vw; background: radial-gradient(circle, rgba(200,241,53,0.07) 0%, transparent 60%);"></div>
+            <div class="container" style="text-align: center; position: relative; z-index: 2;">
+                <h2 style="font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 20px; line-height: 1.15;">Готовы навести порядок<br>в бизнес-процессах?</h2>
+                <p style="max-width: 540px; margin: 0 auto 40px auto; font-size: 1.05rem;">
+                    Напишите мне в Telegram. Задам 3 коротких вопроса о вашей специфике, а через день наглядно продемонстрирую архитектуру вашей будущей системы.
+                </p>
+                <a href="https://t.me/your_telegram" target="_blank" class="btn" style="padding: 20px 48px;">Обсудить проект в Telegram</a>
+                
+                <div style="margin-top: 48px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; opacity: 0.8;">
+                    <span class="badge" style="cursor: default;">Салоны красоты</span>
+                    <span class="badge" style="cursor: default;">Автосервисы</span>
+                    <span class="badge" style="cursor: default;">Медицинские центры</span>
+                    <span class="badge" style="cursor: default;">Онлайн-платформы</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function switchTab(paneId, btnElement) {
+            const buttons = document.querySelectorAll('.tabs-wrapper .badge');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const panes = document.querySelectorAll('.panel-pane');
+            panes.forEach(pane => pane.classList.remove('active'));
+
+            const activePane = document.getElementById(paneId);
+            if (activePane) {
+                activePane.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
